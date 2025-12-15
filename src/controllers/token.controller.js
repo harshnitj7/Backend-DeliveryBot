@@ -7,7 +7,7 @@ exports.storeToken = async (req, res) => {
     const { value, customerDetails } = req.body;
     const { name, location, email } = customerDetails;
 
-    // console.log(req.body)
+    console.log(req.body)
 
     if (!value) {
       return res.status(400).json({ message: "String required" });
@@ -29,6 +29,7 @@ exports.storeToken = async (req, res) => {
 exports.verifyToken = async (req, res) => {
   try {
     const { value } = req.body;
+    console.log(req.body);
 
     const token = await Token.findOne({ value });
 
