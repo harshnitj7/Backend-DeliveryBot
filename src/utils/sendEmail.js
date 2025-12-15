@@ -1,4 +1,5 @@
-const nodemailer = require("nodemailer");
+const Nodemailer = require("nodemailer");
+const { MailtrapTransport } = require("mailtrap");
 
 const sendEmail = async (token, to) => {
   try {
@@ -62,37 +63,31 @@ const sendEmail = async (token, to) => {
 </html>
 `;
 
-    // Mail transporter
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true, // MUST be true for 465
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // App Password
-      },
-      connectionTimeout: 10000, // 10 sec
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
-    });
+    const TOKEN = process.env.MAILTRAP_TOKEN;
 
-    //  <!-- Footer -->
-    //           <tr>
-    //             <td style="background:#f1f5f9;padding:15px;text-align:center;font-size:12px;color:#888;">
-    //               © ${new Date().getFullYear()} Your Company. All rights reserved.
-    //             </td>
-    //           </tr>
+    const transport = Nodemailer.createTransport(
+      MailtrapTransport({
+        token: TOKEN,
+      })
+    );
 
-    const info = await transporter.sendMail({
-      from: `"QR Service" <${process.env.EMAIL_USER}>`,
-      to,
-      subject: "Your QR Code",
-      html: htmlTemplate,
-    });
+    const sender = {
+      address: process.env.EMAIL_USER,
+      name: "Delivery Bot",
+    };
+    const recipients = [to];
 
-    console.log("Email sent ", info.messageId);
+    transport
+      .sendMail({
+        from: sender,
+        to: recipients,
+        subject: "Your QR Code",
+        html: htmlTemplate,
+        category: "Integration Test",
+      })
+      .then(console.log, console.error);
 
-    return info;
+    return;
   } catch (error) {
     console.error(error);
     return;
