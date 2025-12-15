@@ -1,14 +1,5 @@
 const nodemailer = require("nodemailer");
 
-// Mail transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 const sendEmail = async (token, to) => {
   try {
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${token}`;
@@ -70,6 +61,20 @@ const sendEmail = async (token, to) => {
 </body>
 </html>
 `;
+
+    // Mail transporter
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // MUST be true for 465
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // App Password
+      },
+      connectionTimeout: 10000, // 10 sec
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
+    });
 
     //  <!-- Footer -->
     //           <tr>
