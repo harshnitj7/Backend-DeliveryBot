@@ -1,7 +1,7 @@
 const Nodemailer = require("nodemailer");
 const { MailtrapTransport } = require("mailtrap");
 
-const sendEmail = async (token, to) => {
+const sendEmail = async ({token, to,name}) => {
   try {
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${token}`;
 
@@ -21,7 +21,7 @@ const sendEmail = async (token, to) => {
           <!-- Header -->
           <tr>
             <td style="background:#4f46e5;color:#ffffff;padding:20px;text-align:center;">
-              <h1 style="margin:0;font-size:22px;">Your QR Code</h1>
+              <h1 style="margin:0;font-size:22px;">Hello ${name}, Your QR Code</h1>
             </td>
           </tr>
 

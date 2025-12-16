@@ -16,7 +16,7 @@ exports.storeToken = async (req, res) => {
     await Token.create({ value });
 
     // send mail
-    // await sendEmail(value, email);
+    await sendEmail({value, email,name});
 
     res.json({ success: true, message: "String stored" });
   } catch (err) {
